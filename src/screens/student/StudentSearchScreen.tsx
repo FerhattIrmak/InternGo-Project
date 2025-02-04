@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Modal, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, ScrollView, StyleSheet, TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import CustomHeader from '../common/CustomHeader';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
@@ -22,6 +22,7 @@ const SearchScreen = () => {
   
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [activeFilter, setActiveFilter] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(''); // Arama çubuğu durumu
   const db = getFirestore(app);
 
   const filterTitles = {
@@ -145,6 +146,20 @@ const SearchScreen = () => {
     </Modal>
   );
 
+  // Örnek ilanlar için dummy veriler
+  const exampleInternships = [
+    { id: 1, title: 'Stajyer Yazılımcı', company: 'ABC Teknoloji', city: 'Muğla', industry: 'Teknoloji', duration: '3 Ay' },
+    { id: 2, title: 'Pazarlama Stajyeri', company: 'XYZ Ltd.', city: 'İstanbul', industry: 'Pazarlama', duration: '6 Ay' },
+    { id: 3, title: 'Mühendislik Stajyeri', company: 'Techies Inc.', city: 'Ankara', industry: 'Mühendislik', duration: '4 Ay' },
+  ];
+
+  // Arama çubuğu ile filtreleme
+  const filteredInternships = exampleInternships.filter(internship =>
+    internship.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    internship.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    internship.industry.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <View style={styles.container}>
       <CustomHeader
@@ -187,14 +202,28 @@ const SearchScreen = () => {
             isActive={selectedFilters.duration.length > 0}
           />
         </ScrollView>
-        <Text>Stıudent Search Screen</Text>
-        <Text>Stıudent Search Screen</Text>
-
-        <Text>Stıudent Search Screen</Text>
-
-        <Text>Stıudent Search Screen</Text>
-
+        
+        {/* Arama Çubuğu */}
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Arama yap..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
       </View>
+
+      {/* Örnek İlanlar */}
+      <ScrollView style={styles.announcementContainer}>
+        {filteredInternships.map(internship => (
+          <View key={internship.id} style={styles.announcementItem}>
+            <Text style={styles.announcementTitle}>{internship.title}</Text>
+            <Text style={styles.announcementDetails}>
+              {internship.company} - {internship.city} - {internship.duration}
+            </Text>
+          </View>
+        ))}
+      </ScrollView>
+
       {renderFilterModal()}
     </View>
   );
@@ -209,6 +238,34 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
+  },
+  searchInput: {
+    height: 40,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingLeft: 10,
+    marginTop: 10,
+  },
+  announcementContainer: {
+    padding: 10,
+  },
+  announcementItem: {
+    padding: 15,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    marginBottom: 10,
+    backgroundColor: '#f9f9f9',
+  },
+  announcementTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  announcementDetails: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 5,
   },
   filterButton: {
     paddingHorizontal: 16,
