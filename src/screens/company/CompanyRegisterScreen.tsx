@@ -2,8 +2,8 @@ import { View, Text, TextInput, Button, StyleSheet, Image } from 'react-native';
 import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, collection, addDoc } from 'firebase/firestore'; 
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'; // Eklendi
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const CompanyRegisterScreen = () => {
     const [companyName, setCompanyName] = useState('');
@@ -16,6 +16,7 @@ const CompanyRegisterScreen = () => {
     const [companySector, setCompanySector] = useState('');
     const [companyAddress, setCompanyAddress] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [userType, setUserType] = useState('company');
 
     const handleRegister = () => {
         if (password !== confirmPassword) {
@@ -31,36 +32,39 @@ const CompanyRegisterScreen = () => {
                 const user = userCredential.user;
                 setErrorMessage('');
 
-                addDoc(collection(db, 'companies'), {
-                    name: companyName,
-                    email: companyEmail,
-                    phone: companyPhone,
-                    website: companyWebsite,
-                    sector: companySector,
-                    address: companyAddress,
-                    about: companyAbout,
+                addDoc(collection(db, 'users'), {
+                    uid: user.uid,
+                    userType: userType,
+                    company: {
+                        name: companyName,
+                        email: companyEmail,
+                        phone: companyPhone,
+                        website: companyWebsite,
+                        sector: companySector,
+                        address: companyAddress,
+                        about: companyAbout,
+                    },
                     createdAt: new Date(),
-                    userId: user.uid,  
                 })
-                .then(() => {
-                    Toast.show({
-                        type: 'success',
-                        position: 'top',
-                        text1: `${companyName} Şirketi`,
-                        text2: 'Kaydınız başarıyla oluşturuldu.',
-                        visibilityTime: 3000,
+                    .then(() => {
+                        Toast.show({
+                            type: 'success',
+                            position: 'top',
+                            text1: `${companyName} Şirketi`,
+                            text2: 'Kaydınız başarıyla oluşturuldu.',
+                            visibilityTime: 3000,
+                        });
+                    })
+                    .catch((error) => {
+                        setErrorMessage(`Hata: ${error.message}`);
+                        Toast.show({
+                            type: 'error',
+                            position: 'top',
+                            text1: 'Kayıt Hatası!',
+                            text2: error.message,
+                            visibilityTime: 3000,
+                        });
                     });
-                })
-                .catch((error) => {
-                    setErrorMessage(`Hata: ${error.message}`);
-                    Toast.show({
-                        type: 'error',
-                        position: 'top',
-                        text1: 'Kayıt Hatası!',
-                        text2: error.message,
-                        visibilityTime: 3000,
-                    });
-                });
 
             })
             .catch((error) => {
@@ -76,10 +80,10 @@ const CompanyRegisterScreen = () => {
     };
 
     return (
-        <KeyboardAwareScrollView 
+        <KeyboardAwareScrollView
             contentContainerStyle={styles.container}
             enableOnAndroid={true}
-            extraScrollHeight={50}  
+            extraScrollHeight={50}
             keyboardShouldPersistTaps="handled"
         >
             <Image source={require('../../../assets/images/logo.png')} style={styles.logo} />
@@ -96,7 +100,7 @@ const CompanyRegisterScreen = () => {
             <TextInput style={styles.input} placeholder="Şirketin Bulunduğu Sektör" value={companySector} onChangeText={setCompanySector} />
             <TextInput style={[styles.input, styles.largeInput]} placeholder="Şirket Adresi" value={companyAddress} onChangeText={setCompanyAddress} multiline textAlignVertical="top" numberOfLines={4} />
             <TextInput style={[styles.input, styles.largeInput]} placeholder="Şirket Hakkında Kısa Bilgi" value={companyAbout} onChangeText={setCompanyAbout} multiline textAlignVertical="top" numberOfLines={4} />
-            
+
             <Button title="Kayıt Ol" onPress={handleRegister} />
             <Toast ref={(ref) => Toast.setRef(ref)} />
         </KeyboardAwareScrollView>
@@ -132,7 +136,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     largeInput: {
-        height: 80,  
+        height: 80,
         textAlignVertical: 'top',
     },
     errorText: {
