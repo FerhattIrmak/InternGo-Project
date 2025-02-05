@@ -28,10 +28,17 @@ Kullanıcı doğrulama, veri saklama ve gerçek zamanlı veriler için Firebase 
 AKTİF OLARAK GELİŞTİRME AŞAMASINDADIR....
 
 UYGULAMADAN GÖRÜNTÜLER: 
-![Image](https://github.com/user-attachments/assets/4e1213ca-3783-4459-96d7-abdaf24f867d)
-![Image](https://github.com/user-attachments/assets/34a98894-912a-4e35-b4f8-89577bc467e3)
-![Image](https://github.com/user-attachments/assets/668a3699-7a11-4dc2-a8f5-2ade1fad3447)
-![Image](https://github.com/user-attachments/assets/31e2fc85-2214-4fab-83bb-f86a342bae04)
-![Image](https://github.com/user-attachments/assets/6b07b731-f7d2-4bd8-8fd7-e6187de2aa56)
-![Image](https://github.com/user-attachments/assets/05f99089-c87e-4c97-8f5c-d69df7138249)
-![Image](https://github.com/user-attachments/assets/936016c0-b4c9-43ec-8f36-adee2eb5dda5)
+
+<img src="https://github.com/user-attachments/assets/4e1213ca-3783-4459-96d7-abdaf24f867d"  width="440" height="840" >
+<img src="https://github.com/user-attachments/assets/34a98894-912a-4e35-b4f8-89577bc467e3"  width="440" height="840" >
+<img src="https://github.com/user-attachments/assets/34a98894-912a-4e35-b4f8-89577bc467e3"  width="440" height="840" >
+<img src="https://github.com/user-attachments/assets/668a3699-7a11-4dc2-a8f5-2ade1fad3447"  width="440" height="840" >
+<img src="https://github.com/user-attachments/assets/31e2fc85-2214-4fab-83bb-f86a342bae04"  width="440" height="840" >
+<img src="https://github.com/user-attachments/assets/6b07b731-f7d2-4bd8-8fd7-e6187de2aa56"  width="440" height="840" >
+<img src="https://github.com/user-attachments/assets/05f99089-c87e-4c97-8f5c-d69df7138249"  width="440" height="840" >
+<img src="https://github.com/user-attachments/assets/936016c0-b4c9-43ec-8f36-adee2eb5dda5"  width="440" height="840" >
+
+
+
+
+
