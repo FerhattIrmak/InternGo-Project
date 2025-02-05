@@ -40,7 +40,7 @@ const SearchScreen = () => {
     try {
       const docRef = doc(db, 'internshipTypes', 'A6NzzDmxKrc3bgzVHzlo');
       const docSnap = await getDoc(docRef);
-
+ 
       if (docSnap.exists()) {
         const data = docSnap.data();
         setFilterData({
