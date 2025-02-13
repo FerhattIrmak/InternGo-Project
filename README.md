@@ -20,7 +20,9 @@ Staj başvurularının durumunu (Başvuruldu, Aktif, Tamamlandı) takip etme.
 Açık staj pozisyonlarını yayınlama.
 Başvuruları kolayca yönetme ve uygun adaylarla iletişim kurma.
 Öğrencilerin profillerini, yeteneklerini ve motivasyonlarını görme imkânı.
+
 🔧 Teknolojik Altyapı
+
 InternGo, modern mobil uygulama geliştirme teknolojileri kullanılarak geliştirilmiştir.
 Uygulamada React Native ve Expo ile birlikte Firebase hizmetleri (Authentication, Firestore, Storage) entegre edilmiştir. 
 Kullanıcı doğrulama, veri saklama ve gerçek zamanlı veriler için Firebase tercih edilmiştir.
