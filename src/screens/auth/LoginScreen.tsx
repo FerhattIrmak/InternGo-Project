@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image, Key
 import { useNavigation } from '@react-navigation/native';
 import { auth } from '../../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import Toast from 'react-native-toast-message';
 
 const LoginScreen = () => {
@@ -38,22 +39,49 @@ const LoginScreen = () => {
         }
     
         try {
+            // Firebase ile kimlik doğrulama
             const userCredential = await signInWithEmailAndPassword(auth, trimmedEmail, password);
-            Toast.show({
-                type: 'success',
-                text1: 'Hoş geldiniz!',
-                text2: 'Başarıyla giriş yaptınız.',
-                visibilityTime: 2000,
-            });
-    
-            // Kullanıcı tipi kontrolü ve yönlendirme
-            setTimeout(() => {
-                if (userType === 'student') {
-                    navigation.navigate('StudentProfileScreen'); // Öğrenci profiline yönlendir
-                } else if (userType === 'company') {
-                    navigation.navigate('CompanyProfileScreen'); // Şirket profiline yönlendir
+            const uid = userCredential.user.uid;
+            
+            // Kullanıcı bilgilerini Firestore'dan al
+            const db = getFirestore();
+            const userDoc = await getDoc(doc(db, "users", uid));
+            
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                const actualUserType = userData.userType;
+                
+                // Seçilen kullanıcı tipi ile gerçek kullanıcı tipini karşılaştır
+                if (userType !== actualUserType) {
+                    return Toast.show({
+                        type: 'error',
+                        text1: 'Giriş Türü Hatası!',
+                        text2: `Bu hesap bir ${actualUserType === 'student' ? 'öğrenci' : 'şirket'} hesabıdır. Lütfen doğru giriş türünü seçin.`,
+                        visibilityTime: 3000,
+                    });
                 }
-            }, 1200);
+                
+                Toast.show({
+                    type: 'success',
+                    text1: 'Hoş geldiniz!',
+                    text2: 'Başarıyla giriş yaptınız.',
+                    visibilityTime: 2000,
+                });
+                
+                // Veritabanındaki gerçek kullanıcı tipine göre yönlendir
+                setTimeout(() => {
+                    if (actualUserType === 'student') {
+                        navigation.navigate('StudentProfileScreen');
+                    } else if (actualUserType === 'company') {
+                        navigation.navigate('CompanyProfileScreen');
+                    } else {
+                        // Kullanıcı tipi beklenmedik durumlarda
+                        navigation.navigate('HomeScreen');
+                    }
+                }, 1200);
+            } else {
+                throw new Error('Kullanıcı bilgileri bulunamadı.');
+            }
         } catch (error: any) {
             Toast.show({
                 type: 'error',
@@ -64,8 +92,6 @@ const LoginScreen = () => {
         }
     };
     
-    
-
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollView}>
